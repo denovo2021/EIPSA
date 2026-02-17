@@ -114,7 +114,7 @@ The merged dataset `data/EIPSA_OECD_panel_2019_2024.csv` is included in this rep
 
 ## Citation
 
-> [Authors]. (2026). The stress test that changed nothing: Pre-pandemic social cohesion determined lockdown strategy but neither the virus nor the response drove polarization in OECD nations. *Nature Human Behaviour*. [Manuscript submitted for publication].
+> Tomoki Kawahara et.al., (2026). The stress test that changed nothing: Pre-pandemic social cohesion determined lockdown strategy but neither the virus nor the response drove polarization in OECD nations. *Nature Human Behaviour*. [Manuscript submitted for publication].
 
 ---
 
