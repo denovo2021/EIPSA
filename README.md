@@ -2,7 +2,7 @@
 
 **Pre-pandemic Social Cohesion Determined Lockdown Strategy but Neither the Virus nor the Response Drove Polarization in OECD Nations**
 
-Replication materials for the manuscript submitted to *Nature Human Behaviour*.
+Replication materials for the manuscript.
 
 **Repository:** [https://github.com/denovo2021/EIPSA](https://github.com/denovo2021/EIPSA)
 
