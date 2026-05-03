@@ -1,0 +1,23 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(python3:*)",
+      "Bash(pip3 list:*)",
+      "Bash(pip3 install:*)",
+      "Bash(curl:*)",
+      "WebSearch",
+      "Bash(xxd:*)",
+      "Read(//private/tmp/**)",
+      "Bash(extract-text /Users/tk/Documents/TMDU/EIPSA/forSSM/main_manuscript_EIPSA.docx)",
+      "Bash(pandoc /Users/tk/Documents/TMDU/EIPSA/forSSM/main_manuscript_EIPSA.docx -o /tmp/eipsa_main.md)",
+      "Bash(pip list *)",
+      "Bash(python3 -c ' *)",
+      "Read(//tmp/**)",
+      "Bash(pandoc --track-changes=all main_manuscript_EIPSA.docx -o /tmp/main_manuscript.md)",
+      "Bash(pandoc --track-changes=all SupplementaryInformation.docx -o /tmp/supp_info.md)",
+      "Bash(uv run *)",
+      "Bash(pandoc --track-changes=all SupplementaryInformation.docx -o /tmp/si.md)"
+    ]
+  }
+}

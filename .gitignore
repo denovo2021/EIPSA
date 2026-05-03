@@ -23,3 +23,5 @@ output/*.pkl
 
 # Legacy scripts (not part of the replication pipeline)
 legacy/
+owid-covid-data.csv
+V-Dem-CY-FullOthers-v15_csv/

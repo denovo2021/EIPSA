@@ -1,0 +1,20 @@
+[project]
+name = "eipsa"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "libpysal>=4.14.1",
+    "linearmodels>=7.0",
+    "matplotlib>=3.10.9",
+    "numpy>=2.4.4",
+    "pandas>=3.0.2",
+    "pyarrow>=24.0.0",
+    "pycountry>=26.2.16",
+    "requests>=2.33.1",
+    "seaborn>=0.13.2",
+    "statsmodels>=0.14.6",
+    "wbdata>=1.1.0",
+    "wbgapi>=1.0.14",
+]
