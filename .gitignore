@@ -25,3 +25,16 @@ output/*.pkl
 legacy/
 owid-covid-data.csv
 V-Dem-CY-FullOthers-v15_csv/
+eipsa_*.py
+*.docx
+*.xlsx
+*.png
+forNatureHumanBehaivior/
+forPNAS/
+forSSM/
+manuscript/
+output/
+.claude/
+TargetJournals.docx
+EIPSA_*.md
+.Rhistory
