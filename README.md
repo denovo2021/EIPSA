@@ -1,34 +1,61 @@
-# The Stress Test That Changed Nothing
+# EIPSA — Pre-pandemic Social Cohesion and COVID-19 Lockdown Stringency
 
-**Pre-pandemic Social Cohesion Determined Lockdown Strategy but Neither the Virus nor the Response Drove Polarization in OECD Nations**
+Replication materials for the manuscript
 
-Replication materials for the manuscript.
+> **Kawahara T, Fujiwara T.** *Pre-pandemic social cohesion was associated with COVID-19 lockdown stringency, but pandemic shocks did not shift polarization trajectories: a Bayesian dynamic panel analysis of 37 OECD countries.*
+> Under review (revised) at the **Journal of Epidemiology & Community Health (JECH)**.
 
-**Repository:** [https://github.com/denovo2021/EIPSA](https://github.com/denovo2021/EIPSA)
-
----
-
-## Abstract
-
-**Background.** The Parasite-Stress Theory of Values predicts that infectious disease threats drive societies toward authoritarianism and social division. The COVID-19 pandemic offered an unprecedented test of this hypothesis across developed democracies, yet it remains unclear whether the political disruptions observed during the pandemic were caused by the biological threat, the policy response, or neither.
-
-**Methods.** We conducted a panel data analysis of 38 OECD countries (2019–2024) integrating the Varieties of Democracy Project (V-Dem v15) for social polarization indicators, the EM-DAT International Disaster Database for historical epidemic exposure, and the Oxford COVID-19 Government Response Tracker (OxCGRT) via Our World in Data for mortality and lockdown stringency measures. We employed two-way fixed-effects models with first-differenced outcomes and clustered standard errors, supplemented by cross-sectional analyses with robust inference.
-
-**Results.** We report a double null finding. COVID-19 mortality did not predict changes in social polarization (*p* = 0.25). Lockdown stringency did not predict increased polarization either; the coefficient was negative and non-significant (*p* = 0.13). The primary finding is a selection effect: pre-pandemic social cohesion was strongly negatively correlated with subsequent lockdown stringency (*r* = −0.51, *p* = 0.001). Cohesive societies achieved compliance voluntarily and adopted lighter restrictions; polarized societies resorted to stringent mandates.
-
-**Conclusion.** The pandemic served as a stress test that revealed, rather than created, the fractures in OECD democracies. Pandemic preparedness is ultimately a function of social capital accumulated long before a crisis arrives.
+This repository contains all code and the analysis-ready data required to reproduce the Hierarchical Bayesian Dynamic Panel Model, the five sensitivity analyses (two pre-specified; three added in revision), the interpretation quantities, and the figures and tables of the manuscript and Supplementary Information.
 
 ---
 
-## System Requirements
+## Study summary
 
-- **Python** 3.8 or higher
-- Standard scientific computing libraries (see `requirements.txt`)
-- Tested on Python 3.9 (macOS) and Python 3.11 (Ubuntu 22.04)
-- No GPU or high-memory configuration required
-- Expected run time: ~1 minute total on a standard laptop
+We estimate a Hierarchical Bayesian Dynamic Panel Model on a country-year panel of the 38 OECD member states for 2019–2024, integrating:
 
-## Installation
+- **Outcome:** V-Dem *polarization of society* (`v2smpolsoc`, v15; expert-coded, higher = weaker societal polarization), used throughout as the measure-anchored definition of "social cohesion";
+- **Exposure 1 — pandemic mortality burden:** the country-year mean of the monthly all-age **excess-mortality P-score** (percentage deviation of all-cause deaths from the projected pre-pandemic baseline), compiled by Our World in Data from the Human Mortality Database and the World Mortality Dataset (Karlinsky & Kobak, 2021);
+- **Exposure 2 — policy stringency:** the country-year mean OxCGRT Stringency Index (0–100);
+- Four macro-covariates (log population, urban %, health expenditure % GDP, ethnic fractionalization), selected a priori as plausible common causes of exposures and outcome.
+
+Both exposures enter lagged by one year. The model accommodates **macro-structural inertia** (autoregressive term on lagged cohesion) and **spatial non-independence** (UN sub-regional partial pooling under a strictly non-centred two-level hierarchy).
+
+**Estimation sample (exact accounting).** 38 countries × 6 years = 228 source country-years → **111 estimation country-years (37 countries × 2021–2023)**. Excluded by construction: all 2019 rows (initial lagged outcome), all 2020 rows (lagged exposures refer to 2019, before either exposure existed), all 2024 rows (OxCGRT discontinued after December 2022), and Türkiye entirely (no OWID excess-mortality series). Lag-2 sample: 96; joint distributed-lag sample: 74. Derivation: `scripts/interpretation_and_accounting.py`.
+
+**Main findings.** Year-on-year persistence dominates the trajectory of societal polarization (φ = 1.29 per SD of the lagged outcome; native-scale persistence 0.93, 95% HDI 0.87–1.00; half-life of deviations ≈ 10 years), while neither one-year-lagged excess mortality (β = 0.05, 95% HDI −0.04 to 0.13) nor lockdown stringency (β = 0.00, −0.06 to 0.07) is credibly associated with the residual, non-inertial component — informative nulls bounded below ~0.1 SD per SD of exposure. Descriptively, pre-pandemic (2019) cohesion was strongly negatively associated with mean 2020–2021 lockdown stringency (r = −0.51, p = 0.001), a selection pattern we interpret non-causally.
+
+---
+
+## Repository structure
+
+```
+EIPSA/
+├── data/
+│   ├── oecd_panel.parquet                        # Analysis-ready panel (primary pipeline)
+│   ├── oecd_panel.csv                            # CSV mirror
+│   ├── EIPSA_OECD_panel_2019_2024.csv            # Extended panel (incl. v2cacamps)
+│   └── raw/                                      # Source extracts (excess mortality, OxCGRT, HIEF)
+├── scripts/
+│   ├── fit_main_model_correct.py                 # PRIMARY model (Table 1, Figure 1)
+│   ├── fit_sensitivity_lag2.py                   # SA1: Lag-2 horizon (SI Appendix B, Table S1)
+│   ├── fit_sensitivity_interaction.py            # SA2: Effect modification (SI Appendix C, Table S2)
+│   ├── fit_sensitivity_measurement_error.py      # SA3: V-Dem coder-uncertainty propagation
+│   │                                             #      (SI Appendix E, Table S3) [added in revision]
+│   ├── fit_sensitivity_alt_outcome.py            # SA4: Alternative outcome v2cacamps, reverse-scored
+│   │                                             #      (SI Appendix F, Table S4) [added in revision]
+│   ├── fit_sensitivity_distributed_lag.py        # SA5: Joint lag-1 + lag-2 terms
+│   │                                             #      (SI Appendix G, Table S5) [added in revision]
+│   ├── interpretation_and_accounting.py          # Native-scale persistence & half-life, SD-unit
+│   │                                             #      effect bounds, residual lag-1 autocorrelation
+│   │                                             #      (SI Appendix G), exact sample accounting
+│   ├── 02_selection_effect.py                    # Figure 2 (descriptive selection pattern)
+│   └── final_outputs.py                          # 95% HDI summary tables + figure regeneration
+└── output/                                       # Created at run time (not tracked)
+```
+
+## Requirements & installation
+
+Python ≥ 3.12 with **PyMC v5** (NUTS), ArviZ, pandas, NumPy, pyarrow (and matplotlib/seaborn for figures).
 
 ```bash
 git clone https://github.com/denovo2021/EIPSA.git
@@ -36,89 +63,54 @@ cd EIPSA
 pip install -r requirements.txt
 ```
 
----
-
-## Repository Structure
-
-```
-EIPSA/
-├── .gitignore
-├── README.md
-├── requirements.txt
-│
-├── data/
-│   └── EIPSA_OECD_panel_2019_2024.csv   # Merged analysis-ready dataset
-│
-├── scripts/
-│   ├── 01_main_analysis.py               # Table 1 + Figures 1–2
-│   ├── 02_selection_effect.py            # Figure 3 (scatter plot)
-│   └── 03_robustness_checks.py           # SI: GDP, economic controls, jackknife
-│
-└── output/
-    ├── figures/
-    │   ├── figure1.png                   # OECD cohesion trend (2010–2024)
-    │   ├── figure2.png                   # Coefficient plot (horse-race model)
-    │   ├── figure3.png                   # Selection effect scatter
-    │   └── si_figure_s1.png              # Forest plot (all specifications)
-    └── tables/
-        ├── table1.txt                    # Main regression table
-        └── si_robustness.txt             # Supplementary statistics
-```
-
----
-
-## Usage
-
-Run the scripts in order from the repository root:
+## Reproducing the analysis
 
 ```bash
-# Step 1: Reproduce Table 1 (4 regression models) and Figures 1–2
-python scripts/01_main_analysis.py
+# 1. Primary Lag-1 model  ->  output/idata_main_correct.nc, Table 1
+python scripts/fit_main_model_correct.py
 
-# Step 2: Reproduce Figure 3 (selection effect scatter plot)
+# 2. Pre-specified sensitivity analyses (SI Appendices B, C)
+python scripts/fit_sensitivity_lag2.py
+python scripts/fit_sensitivity_interaction.py
+
+# 3. Revision-added sensitivity analyses (SI Appendices E, F, G)
+python scripts/fit_sensitivity_measurement_error.py
+python scripts/fit_sensitivity_alt_outcome.py
+python scripts/fit_sensitivity_distributed_lag.py
+
+# 4. Interpretation quantities, residual-autocorrelation diagnostic,
+#    and exact estimation-sample accounting (requires step 1)
+python scripts/interpretation_and_accounting.py
+
+# 5. Descriptive selection pattern (Figure 2)
 python scripts/02_selection_effect.py
-
-# Step 3: Reproduce all Supplementary Information analyses
-python scripts/03_robustness_checks.py
 ```
 
-All outputs are saved to `output/figures/` and `output/tables/`.
+**Sampler settings (all Bayesian models).** NUTS, 4 chains × 2,000 tuning + 2,000 post-warmup draws (the measurement-error model uses 3,000 tuning), target acceptance 0.95 (0.99 for the measurement-error model), **random seed 20260503**. Pre-specified convergence thresholds: rank-normalized split-R̂ ≤ 1.01 and bulk ESS > 400 for every monitored parameter. Total runtime ≈ 5–10 minutes on a standard laptop (4 cores).
 
----
+## Data sources
 
-## Data Availability
+All data are publicly available; the analysis-ready panels in `data/` permit direct replication.
 
-The merged dataset `data/EIPSA_OECD_panel_2019_2024.csv` is included in this repository for direct replication. It was constructed from the following public sources:
+| Dataset | Used for | URL |
+|---------|----------|-----|
+| V-Dem v15 (`v2smpolsoc`, `v2cacamps`, codelow/codehigh) | Outcome; SA4; SA3 | https://www.v-dem.net/data/the-v-dem-dataset/ |
+| OWID excess mortality (HMD/STMF + World Mortality Dataset) | Mortality-burden exposure (P-score) | https://ourworldindata.org/excess-mortality-covid |
+| OxCGRT Stringency Index | Policy-stringency exposure | https://github.com/OxCGRT/covid-policy-dataset |
+| EM-DAT | Historical epidemic exposure (Question 3) | https://www.emdat.be/ |
+| HIEF | Ethnic fractionalization covariate | (data/raw/hief.csv) |
 
-| Dataset | Source | URL |
-|---------|--------|-----|
-| **V-Dem v15** | Varieties of Democracy Project | https://v-dem.net/data/the-v-dem-dataset/ |
-| **OWID COVID-19** | Our World in Data | https://github.com/owid/covid-19-data |
-| **OxCGRT** | Oxford COVID-19 Government Response Tracker | https://github.com/OxCGRT/covid-policy-dataset |
-| **EM-DAT** | CRED, UCLouvain | https://www.emdat.be/ |
+Key variable: `p_score_mean` = country-year mean of monthly all-age excess-mortality P-scores. (Earlier repository iterations described a log-deaths-per-million variable, `covid_intensity`, from a superseded frequentist design; the fitted models use `p_score_mean` throughout.)
 
-### Key Variables
+## Planned update
 
-| Variable | Source | Description |
-|----------|--------|-------------|
-| `v2smpolsoc` | V-Dem | Social polarization (**high = cohesive**, low = polarized) |
-| `v2cacamps` | V-Dem | Political polarization (high = polarized) |
-| `v2x_libdem` | V-Dem | Liberal democracy index (0–1) |
-| `stringency_norm` | OxCGRT | Lockdown stringency (0–1, normalized) |
-| `covid_intensity` | OWID | log(1 + annual deaths per million) |
-| `econ_support_norm` | OxCGRT | Economic Support Index (0–1, normalized) |
-
-**Outcome coding:** Polarization = −v2smpolsoc, so positive coefficients indicate increased polarization.
-
----
+We commit to re-estimating the primary and sensitivity models as post-2024 V-Dem waves and mortality data accumulate, as a direct out-of-window test of the null short-run shock associations reported in the manuscript. Watch this repository for the tagged update.
 
 ## Citation
 
-> Tomoki Kawahara et.al., (2026). The stress test that changed nothing: Pre-pandemic social cohesion determined lockdown strategy but neither the virus nor the response drove polarization in OECD nations. *Nature Human Behaviour*. [Manuscript submitted for publication].
+> Kawahara T, Fujiwara T. Pre-pandemic social cohesion was associated with COVID-19 lockdown stringency, but pandemic shocks did not shift polarization trajectories: a Bayesian dynamic panel analysis of 37 OECD countries. *J Epidemiol Community Health* (under review, revised).
 
----
+## Contact & license
 
-## License
-
-Code: MIT License.
-Data: Subject to the respective providers' terms of use (V-Dem, OWID, OxCGRT, EM-DAT).
+**Tomoki Kawahara** — Department of Public Health, Institute of Science Tokyo (kawahara.hlth@tmd.ac.jp).
+Code: MIT License. Data products inherit the licenses of their upstream sources (V-Dem, OWID, OxCGRT, EM-DAT).

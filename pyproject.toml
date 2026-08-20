@@ -1,10 +1,13 @@
 [project]
 name = "eipsa"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.1.0"
+description = "Bayesian dynamic panel analysis of pre-pandemic social cohesion and COVID-19 lockdown stringency in 37 OECD countries (JECH revision)"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "pymc>=5.10",
+    "arviz>=0.17",
+    "netcdf4>=1.6",
     "libpysal>=4.14.1",
     "linearmodels>=7.0",
     "matplotlib>=3.10.9",
