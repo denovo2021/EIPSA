@@ -3,7 +3,7 @@
 Replication materials for the manuscript
 
 > **Kawahara T, Fujiwara T.** *Pre-pandemic social cohesion was associated with COVID-19 lockdown stringency, but pandemic shocks did not shift polarization trajectories: a Bayesian dynamic panel analysis of 37 OECD countries.*
-> Under review (revised) at the **Journal of Epidemiology & Community Health (JECH)**.
+> Revised manuscript under peer review (2026). The journal reference and DOI will be added here upon publication.
 
 This repository contains all code and the analysis-ready data required to reproduce the Hierarchical Bayesian Dynamic Panel Model, the five sensitivity analyses (two pre-specified; three added in revision), the interpretation quantities, and the figures and tables of the manuscript and Supplementary Information.
 
@@ -108,7 +108,7 @@ We commit to re-estimating the primary and sensitivity models as post-2024 V-Dem
 
 ## Citation
 
-> Kawahara T, Fujiwara T. Pre-pandemic social cohesion was associated with COVID-19 lockdown stringency, but pandemic shocks did not shift polarization trajectories: a Bayesian dynamic panel analysis of 37 OECD countries. *J Epidemiol Community Health* (under review, revised).
+> Kawahara T, Fujiwara T. Pre-pandemic social cohesion was associated with COVID-19 lockdown stringency, but pandemic shocks did not shift polarization trajectories: a Bayesian dynamic panel analysis of 37 OECD countries. Manuscript under review (2026). The journal reference and DOI will be added upon publication.
 
 ## Contact & license
 
