@@ -5,7 +5,7 @@ Replication materials for the manuscript
 > **Kawahara T, Fujiwara T.** *Pre-pandemic social cohesion was associated with COVID-19 lockdown stringency, but pandemic shocks did not shift polarization trajectories: a Bayesian dynamic panel analysis of 37 OECD countries.*
 > Revised manuscript under peer review (2026). The journal reference and DOI will be added here upon publication.
 
-This repository contains all code and the analysis-ready data required to reproduce the Hierarchical Bayesian Dynamic Panel Model, the five sensitivity analyses (two pre-specified; three added in revision), the interpretation quantities, and the figures and tables of the manuscript and Supplementary Information.
+This repository contains all code and the analysis-ready data required to reproduce the Hierarchical Bayesian Dynamic Panel Model, the five sensitivity analyses, the interpretation quantities, and the figures and tables of the manuscript and Supplementary Information.
 
 ---
 
@@ -34,7 +34,7 @@ EIPSA/
 │   ├── oecd_panel.parquet                        # Analysis-ready panel (primary pipeline)
 │   ├── oecd_panel.csv                            # CSV mirror
 │   ├── EIPSA_OECD_panel_2019_2024.csv            # Extended panel (incl. v2cacamps)
-│   └── raw/                                      # Source extracts (excess mortality, OxCGRT, HIEF)
+│   └── raw/                                      # Source extracts (excess mortality, OxCGRT)
 ├── scripts/
 │   ├── fit_main_model_correct.py                 # PRIMARY model (Table 1, Figure 1)
 │   ├── fit_sensitivity_lag2.py                   # SA1: Lag-2 horizon (SI Appendix B, Table S1)
@@ -69,11 +69,11 @@ pip install -r requirements.txt
 # 1. Primary Lag-1 model  ->  output/idata_main_correct.nc, Table 1
 python scripts/fit_main_model_correct.py
 
-# 2. Pre-specified sensitivity analyses (SI Appendices B, C)
+# 2. Sensitivity analyses 1–2 (SI Appendices B, C)
 python scripts/fit_sensitivity_lag2.py
 python scripts/fit_sensitivity_interaction.py
 
-# 3. Revision-added sensitivity analyses (SI Appendices E, F, G)
+# 3. Sensitivity analyses 3–5 (SI Appendices E, F, G)
 python scripts/fit_sensitivity_measurement_error.py
 python scripts/fit_sensitivity_alt_outcome.py
 python scripts/fit_sensitivity_distributed_lag.py
@@ -86,7 +86,7 @@ python scripts/interpretation_and_accounting.py
 python scripts/02_selection_effect.py
 ```
 
-**Sampler settings (all Bayesian models).** NUTS, 4 chains × 2,000 tuning + 2,000 post-warmup draws (the measurement-error model uses 3,000 tuning), target acceptance 0.95 (0.99 for the measurement-error model), **random seed 20260503**. Pre-specified convergence thresholds: rank-normalized split-R̂ ≤ 1.01 and bulk ESS > 400 for every monitored parameter. Total runtime ≈ 5–10 minutes on a standard laptop (4 cores).
+**Sampler settings (all Bayesian models).** NUTS, 4 chains × 2,000 tuning + 2,000 post-warmup draws (the measurement-error model uses 3,000 tuning), target acceptance 0.95 (0.99 for the measurement-error model), **random seed 20260503**. Convergence thresholds: rank-normalized split-R̂ ≤ 1.01 and bulk ESS > 400 for every monitored parameter. Total runtime ≈ 5–10 minutes on a standard laptop (4 cores).
 
 ## Data sources
 
@@ -98,7 +98,8 @@ All data are publicly available; the analysis-ready panels in `data/` permit dir
 | OWID excess mortality (HMD/STMF + World Mortality Dataset) | Mortality-burden exposure (P-score) | https://ourworldindata.org/excess-mortality-covid |
 | OxCGRT Stringency Index | Policy-stringency exposure | https://github.com/OxCGRT/covid-policy-dataset |
 | EM-DAT | Historical epidemic exposure (Question 3) | https://www.emdat.be/ |
-| HIEF | Ethnic fractionalization covariate | (data/raw/hief.csv) |
+| World Bank World Development Indicators (`SP.POP.TOTL`, `SP.URB.TOTL.IN.ZS`, `SH.XPD.CHEX.GD.ZS`, `NY.GDP.PCAP.PP.KD`, `EN.POP.DNST`; retrieved April 2026) | Covariates (population, urban share, health expenditure); GDP per capita and population density only in the adjusted cross-sectional models (SI Table S6) | https://datacatalog.worldbank.org/search/dataset/0037712/World-Development-Indicators |
+| Alesina et al. (2003), *Fractionalization*, Journal of Economic Growth 8: 155–194 | Ethnic fractionalization covariate (time-invariant) | https://doi.org/10.1023/A:1024471506938 |
 
 Key variable: `p_score_mean` = country-year mean of monthly all-age excess-mortality P-scores. (Earlier repository iterations described a log-deaths-per-million variable, `covid_intensity`, from a superseded frequentist design; the fitted models use `p_score_mean` throughout.)
 
